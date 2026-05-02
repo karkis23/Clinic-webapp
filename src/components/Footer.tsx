@@ -1,13 +1,16 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
-import { Phone, Mail, MapPin, Clock, MessageCircle, ArrowUpRight } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Phone, Mail, MapPin, Clock, MessageCircle, ArrowUpRight, CheckCircle } from 'lucide-react'
+import { urlFor } from '@/lib/sanity'
 
 const quickLinks = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About Us' },
-  { href: '/doctors', label: 'Our Doctors' },
   { href: '/services', label: 'Services' },
   { href: '/gallery', label: 'Gallery' },
-  { href: '/testimonials', label: 'Testimonials' },
   { href: '/contact', label: 'Contact Us' },
 ]
 
@@ -20,7 +23,17 @@ const services = [
   'Acne Care',
 ]
 
-export default function Footer() {
+export default function Footer({ settings }: { settings?: any }) {
+  const [showToast, setShowToast] = useState(false)
+
+  const handleCopyPhone = (e: React.MouseEvent) => {
+    e.preventDefault()
+    const phone = settings?.phone || '+919876543210'
+    navigator.clipboard.writeText(phone)
+    setShowToast(true)
+    setTimeout(() => setShowToast(false), 3000)
+  }
+
   return (
     <footer className="bg-surface-dark text-white relative overflow-hidden">
       {/* Decorative gradient */}
@@ -32,11 +45,22 @@ export default function Footer() {
           {/* Brand */}
           <div>
             <Link href="/" className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                <span className="text-white font-bold text-lg font-[family-name:var(--font-heading)]">C</span>
-              </div>
+              {settings?.logo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img 
+                  src={urlFor(settings.logo).url()} 
+                  alt={settings?.clinicName || 'Clinic Logo'} 
+                  className="h-10 w-auto object-contain rounded-lg"
+                />
+              ) : (
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
+                  <span className="text-white font-bold text-lg font-[family-name:var(--font-heading)]">
+                    {settings?.clinicName ? settings.clinicName.charAt(0) : 'C'}
+                  </span>
+                </div>
+              )}
               <span className="text-xl font-bold font-[family-name:var(--font-heading)]">
-                Clinic<span className="text-primary-light">Care</span>
+                {settings?.clinicName || 'ClinicCare'}
               </span>
             </Link>
             <p className="text-gray-400 text-sm leading-relaxed mb-6">
@@ -44,21 +68,21 @@ export default function Footer() {
             </p>
             <div className="flex gap-3">
               <a
-                href="https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment."
+                href={`https://wa.me/${settings?.whatsapp || '919876543210'}?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment.`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="w-10 h-10 rounded-xl bg-white/10 hover:bg-primary flex items-center justify-center transition-colors"
               >
                 <MessageCircle size={18} />
               </a>
-              <a
-                href="tel:+919876543210"
-                className="w-10 h-10 rounded-xl bg-white/10 hover:bg-primary flex items-center justify-center transition-colors"
+              <button
+                onClick={handleCopyPhone}
+                className="w-10 h-10 rounded-xl bg-white/10 hover:bg-primary flex items-center justify-center transition-colors cursor-pointer"
               >
                 <Phone size={18} />
-              </a>
+              </button>
               <a
-                href="mailto:info@cliniccare.com"
+                href={`mailto:${settings?.email || 'info@cliniccare.com'}`}
                 className="w-10 h-10 rounded-xl bg-white/10 hover:bg-primary flex items-center justify-center transition-colors"
               >
                 <Mail size={18} />
@@ -102,19 +126,19 @@ export default function Footer() {
             <ul className="space-y-4">
               <li className="flex items-start gap-3 text-sm text-gray-400">
                 <MapPin size={18} className="text-primary-light shrink-0 mt-0.5" />
-                <span>123 Healthcare Avenue,<br />Medical District, City 400001</span>
+                <span className="whitespace-pre-wrap">{settings?.address || '123 Healthcare Avenue,\nMedical District, City 400001'}</span>
               </li>
               <li className="flex items-center gap-3 text-sm text-gray-400">
                 <Phone size={18} className="text-primary-light shrink-0" />
-                <a href="tel:+919876543210" className="hover:text-white transition-colors">+91 98765 43210</a>
+                <button onClick={handleCopyPhone} className="hover:text-white transition-colors cursor-pointer">{settings?.phone || '+91 98765 43210'}</button>
               </li>
               <li className="flex items-center gap-3 text-sm text-gray-400">
                 <Mail size={18} className="text-primary-light shrink-0" />
-                <a href="mailto:info@cliniccare.com" className="hover:text-white transition-colors">info@cliniccare.com</a>
+                <a href={`mailto:${settings?.email || 'info@cliniccare.com'}`} className="hover:text-white transition-colors">{settings?.email || 'info@cliniccare.com'}</a>
               </li>
               <li className="flex items-center gap-3 text-sm text-gray-400">
                 <Clock size={18} className="text-primary-light shrink-0" />
-                <span>Mon – Sat: 9:00 AM – 7:00 PM</span>
+                <span className="whitespace-pre-wrap">{settings?.workingHours || 'Mon – Sat: 9:00 AM – 7:00 PM'}</span>
               </li>
             </ul>
           </div>
@@ -123,7 +147,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="border-t border-white/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm text-gray-500">
-            © {new Date().getFullYear()} ClinicCare. All rights reserved.
+            © {new Date().getFullYear()} {settings?.clinicName || 'ClinicCare'}. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-gray-500">
             <Link href="/contact" className="hover:text-primary-light transition-colors">Privacy Policy</Link>
@@ -131,6 +155,28 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Professional Copy Toast */}
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[60]"
+          >
+            <div className="bg-white px-5 py-3 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                <CheckCircle size={18} />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-gray-800">Phone Number Copied!</span>
+                <span className="text-xs text-gray-500 font-medium">{settings?.phone || '+919876543210'}</span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </footer>
   )
 }

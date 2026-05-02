@@ -8,15 +8,6 @@ const iconMap: Record<string, any> = {
   Stethoscope, Scissors, Sparkles, Heart, Zap, Shield
 }
 
-// Fallback data when CMS not connected
-const fallbackServices = [
-  { _id: '1', title: 'General Consultation', slug: { current: 'general-consultation' }, icon: 'Stethoscope', shortDescription: 'Comprehensive health checkups and medical consultations with experienced physicians.' },
-  { _id: '2', title: 'Skin Treatment', slug: { current: 'skin-treatment' }, icon: 'Sparkles', shortDescription: 'Advanced dermatological treatments for all skin types and conditions.' },
-  { _id: '3', title: 'Hair Loss Treatment', slug: { current: 'hair-loss' }, icon: 'Shield', shortDescription: 'Proven therapies to restore hair growth and improve scalp health.' },
-  { _id: '4', title: 'Acne Care', slug: { current: 'acne-care' }, icon: 'Heart', shortDescription: 'Targeted acne solutions including medical and cosmetic approaches.' },
-  { _id: '5', title: 'Laser Treatment', slug: { current: 'laser-treatment' }, icon: 'Zap', shortDescription: 'State-of-the-art laser procedures for skin rejuvenation and correction.' },
-  { _id: '6', title: 'Cosmetic Procedures', slug: { current: 'cosmetic-procedures' }, icon: 'Scissors', shortDescription: 'Safe, minimally invasive cosmetic enhancements by expert practitioners.' },
-]
 
 interface ServiceCardProps {
   title: string
@@ -58,7 +49,11 @@ export function ServiceCard({ title, slug, icon, shortDescription, index = 0 }: 
   )
 }
 
-export function ServicesPreview() {
+export function ServicesPreview({ services = [] }: { services?: any[] }) {
+  const displayServices = services?.slice(0, 3) || []
+  
+  if (displayServices.length === 0) return null
+
   return (
     <section className="py-24 bg-white relative">
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-accent/20 rounded-full blur-3xl" />
@@ -75,7 +70,7 @@ export function ServicesPreview() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {fallbackServices.map((service, i) => (
+          {displayServices.map((service, i) => (
             <ServiceCard key={service._id} {...service} index={i} />
           ))}
         </div>

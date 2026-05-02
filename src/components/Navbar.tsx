@@ -3,21 +3,29 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Phone, MessageCircle } from 'lucide-react'
+import { Menu, X, Phone, MessageCircle, CheckCircle } from 'lucide-react'
+import { urlFor } from '@/lib/sanity'
 
 const navLinks = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
-  { href: '/doctors', label: 'Doctors' },
   { href: '/services', label: 'Services' },
   { href: '/gallery', label: 'Gallery' },
-  { href: '/testimonials', label: 'Testimonials' },
   { href: '/contact', label: 'Contact' },
 ]
 
-export default function Navbar() {
+export default function Navbar({ settings }: { settings?: any }) {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [showToast, setShowToast] = useState(false)
+
+  const handleCopyPhone = (e: React.MouseEvent) => {
+    e.preventDefault()
+    const phone = settings?.phone || '+919876543210'
+    navigator.clipboard.writeText(phone)
+    setShowToast(true)
+    setTimeout(() => setShowToast(false), 3000)
+  }
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20)
@@ -37,12 +45,23 @@ export default function Navbar() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg group-hover:shadow-primary/30 transition-shadow">
-              <span className="text-white font-bold text-lg font-[family-name:var(--font-heading)]">C</span>
-            </div>
+            {settings?.logo ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img 
+                src={urlFor(settings.logo).url()} 
+                alt={settings?.clinicName || 'Clinic Logo'} 
+                className="h-10 w-auto object-contain rounded-lg shadow-sm"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center shadow-lg group-hover:shadow-primary/30 transition-shadow">
+                <span className="text-white font-bold text-lg font-[family-name:var(--font-heading)]">
+                  {settings?.clinicName ? settings.clinicName.charAt(0) : 'C'}
+                </span>
+              </div>
+            )}
             <div>
               <span className="text-xl font-bold font-[family-name:var(--font-heading)] text-text-primary">
-                Clinic<span className="text-primary">Care</span>
+                {settings?.clinicName || 'ClinicCare'}
               </span>
             </div>
           </Link>
@@ -62,15 +81,15 @@ export default function Navbar() {
 
           {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
-            <a
-              href="tel:+919876543210"
-              className="flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-primary transition-colors"
+            <button
+              onClick={handleCopyPhone}
+              className="flex items-center gap-2 text-sm font-medium text-text-secondary hover:text-primary transition-colors cursor-pointer"
             >
               <Phone size={16} />
               <span>Call Now</span>
-            </a>
+            </button>
             <a
-              href="https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment."
+              href={`https://wa.me/${settings?.whatsapp || '919876543210'}?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment.`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-md hover:shadow-lg hover:shadow-primary/20"
@@ -113,14 +132,17 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="pt-4 border-t border-border mt-4 space-y-3">
-                <a
-                  href="tel:+919876543210"
-                  className="flex items-center gap-3 px-4 py-3 text-text-secondary hover:text-primary transition-colors"
+                <button
+                  onClick={(e) => {
+                    handleCopyPhone(e)
+                    setIsOpen(false)
+                  }}
+                  className="w-full flex items-center gap-3 px-4 py-3 text-text-secondary hover:text-primary transition-colors"
                 >
                   <Phone size={18} /> Call Now
-                </a>
+                </button>
                 <a
-                  href="https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment."
+                  href={`https://wa.me/${settings?.whatsapp || '919876543210'}?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment.`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-semibold shadow-md"
@@ -128,6 +150,28 @@ export default function Navbar() {
                   <MessageCircle size={18} />
                   Book on WhatsApp
                 </a>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Professional Copy Toast */}
+      <AnimatePresence>
+        {showToast && (
+          <motion.div
+            initial={{ opacity: 0, y: -20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.95 }}
+            className="fixed top-24 left-1/2 -translate-x-1/2 z-[60]"
+          >
+            <div className="bg-white px-5 py-3 rounded-full shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-gray-100 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                <CheckCircle size={18} />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-sm font-semibold text-gray-800">Phone Number Copied!</span>
+                <span className="text-xs text-gray-500 font-medium">{settings?.phone || '+919876543210'}</span>
               </div>
             </div>
           </motion.div>

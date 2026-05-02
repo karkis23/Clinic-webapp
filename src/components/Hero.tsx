@@ -2,8 +2,9 @@
 
 import { motion } from 'framer-motion'
 import { MessageCircle, Phone, ArrowDown } from 'lucide-react'
+import { urlFor } from '@/lib/sanity'
 
-export default function Hero() {
+export default function Hero({ settings }: { settings?: any }) {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden bg-gradient-to-br from-surface via-surface-alt to-accent/20">
       {/* Background pattern */}
@@ -27,19 +28,27 @@ export default function Hero() {
               Trusted Healthcare Partner
             </div>
 
-            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold font-[family-name:var(--font-heading)] text-text-primary leading-[1.1] mb-6">
-              Your Health,{' '}
-              <span className="gradient-text">Our Priority</span>
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold font-[family-name:var(--font-heading)] text-text-primary leading-[1.1] mb-6 whitespace-pre-wrap">
+              {settings?.heroHeading ? (
+                <>
+                  {settings.heroHeading.replace('Our Priority', '')}
+                  <span className="gradient-text">Our Priority</span>
+                </>
+              ) : (
+                <>
+                  Your Health,{' '}
+                  <span className="gradient-text">Our Priority</span>
+                </>
+              )}
             </h1>
 
-            <p className="text-lg text-text-secondary leading-relaxed mb-10 max-w-xl">
-              Experience compassionate care with modern medicine. Our team of expert doctors
-              provides personalized treatment plans tailored to your unique health needs.
+            <p className="text-lg text-text-secondary leading-relaxed mb-10 max-w-xl whitespace-pre-wrap">
+              {settings?.heroSubheading || 'Experience compassionate care with modern medicine. Our team of expert doctors provides personalized treatment plans tailored to your unique health needs.'}
             </p>
 
             <div className="flex flex-wrap gap-4">
               <a
-                href="https://wa.me/919876543210?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment."
+                href={`https://wa.me/${settings?.whatsapp || '919876543210'}?text=Hello%2C%20I%20would%20like%20to%20book%20an%20appointment.`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 bg-primary hover:bg-primary-dark text-white px-8 py-4 rounded-2xl font-semibold transition-all shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/30 hover:-translate-y-0.5"
@@ -48,7 +57,7 @@ export default function Hero() {
                 Book on WhatsApp
               </a>
               <a
-                href="tel:+919876543210"
+                href={`tel:${settings?.phone || '+919876543210'}`}
                 className="flex items-center gap-2 bg-white hover:bg-gray-50 text-text-primary px-8 py-4 rounded-2xl font-semibold transition-all shadow-md border border-border hover:-translate-y-0.5"
               >
                 <Phone size={20} />
@@ -83,15 +92,24 @@ export default function Hero() {
             className="hidden lg:block relative"
           >
             <div className="relative">
-              <div className="w-full aspect-[4/5] rounded-3xl bg-gradient-to-br from-primary/20 via-accent/30 to-secondary/10 overflow-hidden shadow-2xl">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-center p-8">
-                    <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
-                      <span className="text-4xl">🏥</span>
+              <div className="w-full aspect-[4/5] rounded-3xl bg-gradient-to-br from-primary/20 via-accent/30 to-secondary/10 overflow-hidden shadow-2xl relative">
+                {settings?.heroImage ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img 
+                    src={urlFor(settings.heroImage).url()} 
+                    alt="Clinic Hero" 
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="text-center p-8">
+                      <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-primary/20 flex items-center justify-center">
+                        <span className="text-4xl">🏥</span>
+                      </div>
+                      <p className="text-text-secondary text-sm">Hero image from Sanity CMS</p>
                     </div>
-                    <p className="text-text-secondary text-sm">Hero image from Sanity CMS</p>
                   </div>
-                </div>
+                )}
               </div>
               {/* Floating card */}
               <div className="absolute -bottom-6 -left-6 bg-white rounded-2xl p-5 shadow-xl border border-border">

@@ -1,17 +1,23 @@
 import Hero from '@/components/Hero'
 import { ServicesPreview } from '@/components/ServiceCard'
 import { WhyChooseUs, CTASection } from '@/components/CTASection'
-import { DoctorsPreview } from '@/components/DoctorCard'
-import { TestimonialsPreview } from '@/components/TestimonialCard'
 import AnimatedSection from '@/components/AnimatedSection'
 import Link from 'next/link'
 import { ArrowRight, Images } from 'lucide-react'
+import { getSiteSettings, getServices, getGalleryImages } from '@/lib/queries'
+import { urlFor } from '@/lib/sanity'
 
-export default function HomePage() {
+export default async function HomePage() {
+  const settings = await getSiteSettings()
+  const services = await getServices()
+  const galleryImages = await getGalleryImages()
+  
+  const displayGallery = galleryImages?.slice(0, 4) || []
+
   return (
     <>
       {/* Hero */}
-      <Hero />
+      <Hero settings={settings} />
 
       {/* About Preview */}
       <section className="py-24 bg-white relative">
@@ -57,16 +63,10 @@ export default function HomePage() {
       </section>
 
       {/* Services */}
-      <ServicesPreview />
+      <ServicesPreview services={services} />
 
       {/* Why Choose Us */}
       <WhyChooseUs />
-
-      {/* Doctors */}
-      <DoctorsPreview />
-
-      {/* Testimonials */}
-      <TestimonialsPreview />
 
       {/* Gallery Preview */}
       <section className="py-24 bg-white relative">
@@ -83,17 +83,35 @@ export default function HomePage() {
             </div>
           </AnimatedSection>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[1,2,3,4].map(i => (
-              <AnimatedSection key={i} delay={i * 0.1}>
-                <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/10 via-accent/20 to-secondary/10 overflow-hidden hover:scale-[1.02] transition-transform cursor-pointer relative group">
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors flex items-center justify-center">
-                    <Images size={32} className="text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+          {displayGallery.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {displayGallery.map((img: any, i: number) => (
+                <AnimatedSection key={img._id} delay={i * 0.1}>
+                  <div className="aspect-square rounded-2xl bg-gradient-to-br from-primary/10 via-accent/20 to-secondary/10 overflow-hidden hover:scale-[1.02] transition-transform cursor-pointer relative group">
+                    {img.image ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={urlFor(img.image).width(600).height(600).url()}
+                        alt={img.caption || 'Clinic Gallery'}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Images size={32} className="text-white/50" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-center justify-center">
+                      <p className="text-white font-semibold text-sm opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-md">
+                        {img.caption}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              </AnimatedSection>
-            ))}
-          </div>
+                </AnimatedSection>
+              ))}
+            </div>
+          ) : (
+            <p className="text-center text-text-secondary">More photos coming soon...</p>
+          )}
 
           <div className="text-center mt-10">
             <Link

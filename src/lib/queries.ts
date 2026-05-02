@@ -19,37 +19,6 @@ export async function getSiteSettings() {
   )
 }
 
-// ─── Doctors ─────────────────────────────────
-export async function getDoctors() {
-  return client.fetch(
-    `*[_type == "doctor"] | order(order asc) {
-      _id,
-      name,
-      slug,
-      image,
-      qualification,
-      experience,
-      specialty,
-      bio
-    }`
-  )
-}
-
-export async function getDoctorBySlug(slug: string) {
-  return client.fetch(
-    `*[_type == "doctor" && slug.current == $slug][0]{
-      _id,
-      name,
-      slug,
-      image,
-      qualification,
-      experience,
-      specialty,
-      bio
-    }`,
-    { slug }
-  )
-}
 
 // ─── Services ────────────────────────────────
 export async function getServices() {
@@ -81,18 +50,6 @@ export async function getServiceBySlug(slug: string) {
   )
 }
 
-// ─── Testimonials ────────────────────────────
-export async function getTestimonials() {
-  return client.fetch(
-    `*[_type == "testimonial"] | order(_createdAt desc) {
-      _id,
-      name,
-      rating,
-      review,
-      image
-    }`
-  )
-}
 
 // ─── Gallery ─────────────────────────────────
 export async function getGalleryImages() {
