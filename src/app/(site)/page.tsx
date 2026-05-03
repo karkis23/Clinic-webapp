@@ -1,3 +1,4 @@
+// Refresh trigger
 import Hero from '@/components/Hero'
 import { ServicesPreview } from '@/components/ServiceCard'
 import { WhyChooseUs, CTASection } from '@/components/CTASection'
@@ -109,7 +110,7 @@ export default async function HomePage() {
                         <Images size={28} className="text-text-muted/30" />
                       </div>
                     )}
-                    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-colors flex items-end p-4">
+                    <div className="absolute inset-0 bg-primary/0 group-hover:bg-primary/40 transition-colors flex items-end p-4" suppressHydrationWarning>
                       <p className="text-white font-medium text-sm opacity-0 group-hover:opacity-100 transition-opacity">
                         {img.caption}
                       </p>
