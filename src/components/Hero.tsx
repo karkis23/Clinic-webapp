@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, ArrowRight, Award, Users, Star } from 'lucide-react'
 import { urlFor } from '@/lib/sanity'
 import CallModal from './CallModal'
+import Counter from './Counter'
 
 export default function Hero({ settings }: { settings?: any }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
@@ -86,7 +87,7 @@ export default function Hero({ settings }: { settings?: any }) {
             </h1>
 
             {/* Subheading */}
-            <p className="text-base sm:text-lg lg:text-xl text-white/80 leading-relaxed mb-10 sm:mb-12 max-w-2xl font-light px-4">
+            <p className="text-base sm:text-lg lg:text-xl text-white/80 leading-relaxed mb-10 sm:mb-12 max-w-2xl font-light px-4" suppressHydrationWarning>
               {settings?.heroSubheading || 'Providing comprehensive medical care with a focus on precision, compassion, and your long-term wellbeing. Your health deserves nothing less.'}
             </p>
 
@@ -117,13 +118,17 @@ export default function Hero({ settings }: { settings?: any }) {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 pt-8 sm:pt-10 border-t border-white/10 w-full max-w-4xl">
               <div className="flex flex-col items-center justify-center gap-2">
                 <Award size={28} className="text-secondary mb-1 sm:mb-2" />
-                <p className="text-2xl sm:text-3xl font-bold text-white font-[family-name:var(--font-heading)]">15+</p>
+                <p className="text-2xl sm:text-3xl font-bold text-white font-[family-name:var(--font-heading)]">
+                  <Counter value={15} suffix="+" delay={0.1} />
+                </p>
                 <p className="text-xs sm:text-sm text-white/60 uppercase tracking-widest font-medium">Years Experience</p>
               </div>
               
               <div className="flex flex-col items-center justify-center gap-2 relative">
                 <Users size={28} className="text-secondary mb-1 sm:mb-2" />
-                <p className="text-2xl sm:text-3xl font-bold text-white font-[family-name:var(--font-heading)]">10K+</p>
+                <p className="text-2xl sm:text-3xl font-bold text-white font-[family-name:var(--font-heading)]">
+                  <Counter value={10} suffix="K+" delay={0.3} />
+                </p>
                 <p className="text-xs sm:text-sm text-white/60 uppercase tracking-widest font-medium">Happy Patients</p>
                 
                 {/* Dividers for desktop */}
@@ -133,7 +138,9 @@ export default function Hero({ settings }: { settings?: any }) {
               
               <div className="flex flex-col items-center justify-center gap-2">
                 <Star size={28} className="text-secondary mb-1 sm:mb-2" />
-                <p className="text-2xl sm:text-3xl font-bold text-white font-[family-name:var(--font-heading)]">4.9/5</p>
+                <p className="text-2xl sm:text-3xl font-bold text-white font-[family-name:var(--font-heading)]">
+                  <Counter value={4.9} decimals={1} suffix="/5" delay={0.5} />
+                </p>
                 <p className="text-xs sm:text-sm text-white/60 uppercase tracking-widest font-medium">Patient Rating</p>
               </div>
             </div>
