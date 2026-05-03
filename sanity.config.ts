@@ -8,7 +8,7 @@ export default defineConfig({
   title: 'ClinicCare CMS',
   basePath: '/studio',
 
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || '',
+  projectId: 'dol70uz3',
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
 
   plugins: [structureTool(), visionTool()],
