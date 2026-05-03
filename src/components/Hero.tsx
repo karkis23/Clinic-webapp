@@ -53,7 +53,7 @@ export default function Hero({ settings }: { settings?: any }) {
           </AnimatePresence>
           
           {/* Elegant Dark Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-b from-primary-dark/80 via-primary-dark/60 to-primary-dark/90 z-10" />
+          <div className="absolute inset-0 bg-gradient-to-b from-primary-dark/40 via-transparent to-primary-dark/60 z-10" />
         </div>
 
         {/* Main Content Area */}
