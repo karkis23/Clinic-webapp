@@ -143,7 +143,7 @@ export default function Hero({ settings }: { settings?: any }) {
         {/* Slider indicators */}
         {imageUrls.length > 1 && (
           <div className="relative z-20 flex gap-2 mt-16 sm:mt-12">
-            {imageUrls.map((_, i) => (
+            {imageUrls.map((_: string, i: number) => (
               <button
                 key={i}
                 onClick={() => setCurrentImageIndex(i)}
