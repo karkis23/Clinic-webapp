@@ -23,6 +23,13 @@ const siteSettings = {
       of: [{ type: 'image', options: { hotspot: true } }],
       description: 'Upload multiple images here to create a background slider.'
     },
+    {
+      name: 'googleMapsEmbedUrl',
+      title: 'Google Maps Embed URL',
+      type: 'text',
+      rows: 3,
+      description: 'Paste your Google Maps embed link here. You can paste the whole <iframe> tag or just the link (starting with https://www.google.com/maps/embed...).'
+    },
   ],
 }
 
