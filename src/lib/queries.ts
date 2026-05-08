@@ -89,3 +89,17 @@ export async function getGalleryImages() {
     )
   )
 }
+// ─── About Page ──────────────────────────────
+export async function getAboutPage() {
+  return fetchWithTimeout(() =>
+    client.fetch(
+      `*[_type == "aboutPage"][0]{
+      title,
+      content,
+      image,
+      stats,
+      features
+    }`
+    )
+  )
+}

@@ -1,17 +1,17 @@
-// Refresh trigger
 import Hero from '@/components/Hero'
 import { ServicesPreview } from '@/components/ServiceCard'
 import { WhyChooseUs, CTASection } from '@/components/CTASection'
 import AnimatedSection from '@/components/AnimatedSection'
 import Link from 'next/link'
 import { ArrowRight, Images, Stethoscope } from 'lucide-react'
-import { getSiteSettings, getServices, getGalleryImages } from '@/lib/queries'
+import { getSiteSettings, getServices, getGalleryImages, getAboutPage } from '@/lib/queries'
 import { urlFor } from '@/lib/sanity'
 
 export default async function HomePage() {
   const settings = await getSiteSettings()
   const services = await getServices()
   const galleryImages = await getGalleryImages()
+  const aboutPage = await getAboutPage()
   
   const displayGallery = galleryImages?.slice(0, 4) || []
 
@@ -28,9 +28,17 @@ export default async function HomePage() {
               <div className="relative">
                 <div className="w-full aspect-square max-w-md rounded-2xl bg-gradient-to-br from-primary/5 via-accent/30 to-secondary/5 overflow-hidden">
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center">
-                      <Stethoscope size={36} className="text-primary/30" />
-                    </div>
+                    {aboutPage?.image ? (
+                      <img 
+                        src={urlFor(aboutPage.image).width(800).url()} 
+                        alt="About ClinicCare"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-20 h-20 rounded-2xl bg-primary/10 flex items-center justify-center">
+                        <Stethoscope size={36} className="text-primary/30" />
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div className="absolute -bottom-3 -right-3 w-full h-full rounded-2xl border border-secondary/15 -z-10" />
