@@ -34,7 +34,8 @@ export async function getSiteSettings() {
       heroHeading,
       heroSubheading,
       heroImage,
-      heroImages
+      heroImages,
+      googleMapsEmbedUrl
     }`
     )
   )
