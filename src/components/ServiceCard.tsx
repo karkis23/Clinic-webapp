@@ -26,22 +26,23 @@ export function ServiceCard({ title, slug, icon, shortDescription, index = 0 }: 
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.06 }}
+      className="h-full"
     >
       <Link
         href={`/services/${slug.current}`}
-        className="group block bg-white rounded-xl p-6 border border-border hover:border-secondary/30 transition-all shadow-card hover:shadow-card-hover hover:-translate-y-0.5"
+        className="group flex flex-col h-full bg-white rounded-xl p-6 border border-border hover:border-secondary/30 transition-all shadow-card hover:shadow-card-hover hover:-translate-y-0.5"
       >
-        <div className="w-11 h-11 rounded-lg bg-primary/5 group-hover:bg-secondary/10 flex items-center justify-center transition-colors mb-4">
+        <div className="w-11 h-11 rounded-lg bg-primary/5 group-hover:bg-secondary/10 flex items-center justify-center transition-colors mb-4 flex-shrink-0">
           <IconComponent size={20} className="text-primary group-hover:text-secondary transition-colors" />
         </div>
 
         <h3 className="text-base font-bold font-[family-name:var(--font-heading)] text-text-primary group-hover:text-primary transition-colors mb-2">
           {title}
         </h3>
-        <p className="text-sm text-text-secondary leading-relaxed mb-4 line-clamp-3">
+        <p className="text-sm text-text-secondary leading-relaxed mb-6 line-clamp-3">
           {shortDescription}
         </p>
-        <span className="inline-flex items-center gap-1 text-primary text-sm font-medium group-hover:gap-2 transition-all">
+        <span className="mt-auto inline-flex items-center gap-1 text-primary text-sm font-medium group-hover:gap-2 transition-all">
           Learn more <ArrowRight size={14} />
         </span>
       </Link>
