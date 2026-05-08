@@ -169,7 +169,7 @@ export default async function AboutPage() {
           </AnimatedSection>
 
           <div className="grid sm:grid-cols-3 gap-6">
-            {features.map((item, i) => (
+            {features.map((item: any, i: number) => (
               <AnimatedSection key={item.title} delay={i * 0.1}>
                 <div className="aspect-[4/3] rounded-2xl bg-gradient-to-br from-primary/10 via-accent/20 to-secondary/10 flex items-center justify-center overflow-hidden relative group">
                   {item.image ? (
